@@ -1,0 +1,11 @@
+.calculator-button-row {
+    display: flex;
+}
+
+.calculator-container {
+    display: block;
+    width: fit-content;
+    height: fit-content;
+    border: solid 1px black;
+    padding: 2px;
+}

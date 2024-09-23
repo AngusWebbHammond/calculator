@@ -1,0 +1,11 @@
+.button {
+    width: 61px;
+    border: 0;
+    height: 40px;
+    background-color: white;
+}
+
+.button:hover {
+    background-color: lightgrey;
+    border-radius: 5px;
+}

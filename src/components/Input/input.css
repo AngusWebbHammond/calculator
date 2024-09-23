@@ -1,0 +1,9 @@
+.input-box {
+    width: 360px;
+    height: 100px;
+    padding: 0;
+    border: none;
+    text-align: right;
+    padding: 3px;
+    font-size: 50px;
+}
