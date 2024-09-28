@@ -1,12 +1,19 @@
-import React, { useState } from 'react'
-import './input.css'
+import React, { useState } from 'react';
+import './input.css';
+import PropTypes from 'prop-types';
 
-const Input = () => {
-    const [returnValue, setReturnValue] = useState('0');
-
+const Input = (props) => {
   return (
-    <input placeholder={returnValue} className='input-box'/>
+    <>
+      <h3>{props.currentOperation.join('')}</h3>
+      <input placeholder={0} className='input-box' value={props.currentValue} onChange={() => console.log("hi")}/>
+    </>
   )
+}
+
+Input.propTypes = {
+  currentOperation: PropTypes.array,
+  currentValue: PropTypes.number,
 }
 
 export default Input
