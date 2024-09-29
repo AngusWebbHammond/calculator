@@ -6,113 +6,67 @@ import MemoryButton from '../Memory-Buttons';
 
 const Calculator = () => {
 
-    const [operationList, setOperationList] = useState([]);
-    const [currentCount, setCurrentCount] = useState(0);
+    const [operationList, setOperationList] = useState('');
+    const [currentCount, setCurrentCount] = useState('0');
+    const [isNewValue, setIsNewValue] = useState(true);
 
-    const modifyCount = (value) => {
+    // Change current count
+    // wait for button click
+    // upon button click:
+    //  - if number then push right to the value, if new value, then set the value to new
+    //  - if operator then eval the prior operation, updating the total and the current number,
+    //  - if backspace then remove right most in current number, this does not effect the total at all
+    //  - if CE then clear most recent entry (current number)
+    //  - if C then clear all the entries
 
-        if (typeof value === 'number') {
-            if (currentCount == 0) {
-                setCurrentCount(value);
+    const modifyValue = (value) => {
+        if (typeof value == 'number') {
+            if (isNewValue) {
+                setCurrentCount(value.toString());
+                setIsNewValue(false);
                 return;
             }
-
-            setCurrentCount(value + currentCount*10);
+            else {
+                const tempValue = currentCount + value.toString();
+                setCurrentCount(tempValue);
+                setIsNewValue(false);
+                return;
+            }
+        }
+        else if (value == 'BSP') {
+            const tempValue = currentCount.slice(0, -1);
+            setCurrentCount(tempValue);
             return;
         }
         else {
-            if (value == '+') {
-                if (currentCount == 0) {
-                    const tempArray = operationList;
-                    tempArray.push('+');
-                    setOperationList(tempArray);
-                    return;
-                }
-                else {
-                    const count = currentCount.toLocaleString();
-                    const tempArray = operationList;
-                    tempArray.push(count, '+');
-                    setOperationList(tempArray);
-                    setCurrentCount(0);
-                    return;
-                }
-                
-            }
-            else if (value == '-') {
-                if (currentCount == 0) {
-                    const tempArray = operationList;
-                    tempArray.push('-');
-                    setOperationList(tempArray);
-                    return;
-                }
-                const count = currentCount.toLocaleString();
-                const tempArray = operationList;
-                tempArray.push(count, '-');
-                setOperationList(tempArray);
-                setCurrentCount(0);
-                return;
-            }
+            console.log("No Correct value in modify value.")
+            return;
+        }
+    }
 
-            else if (value == 'X') {
-                if (currentCount == 0) {
-                    const tempArray = operationList;
-                    tempArray.push('*');
-                    setOperationList(tempArray);
-                    return;
-                }
-                const count = currentCount.toLocaleString();
-                const tempArray = operationList;
-                tempArray.push(count, '*');
-                setOperationList(tempArray);
-                setCurrentCount(0);
+    const modifyOperation = (operation) => {
+        const operations = ['+','-','*','/'];
+        if (operations.includes(operation)) {
+            if (operations.includes(operationList.slice(-1))) {
+                const tempOperationList = operationList.slice(0, -1) + operation;
+                setOperationList(tempOperationList);
                 return;
             }
-
-            else if (value == '/') {
-                if (currentCount == 0) {
-                    const tempArray = operationList;
-                    tempArray.push('/');
-                    setOperationList(tempArray);
-                    return;
-                }
-                const count = currentCount.toLocaleString();
-                const tempArray = operationList;
-                tempArray.push(count, '/');
-                setOperationList(tempArray);
-                setCurrentCount(0);
+            else{
+                const evalValueTotal = eval(operationList + currentCount);
+                const tempOperationList = evalValueTotal + operation;
+                setCurrentCount(evalValueTotal.toString());
+                setOperationList(tempOperationList);
+                setIsNewValue(true);
                 return;
             }
-
-            else if (value == '=') {
-                const tempArray = operationList;
-                tempArray.push(currentCount);
-                const evaluateCount = eval(tempArray.join(''));
-                setCurrentCount(0);
-                setOperationList([evaluateCount]);
-                return;
-            }
-            else if (value == 'C') {
-                setCurrentCount(0);
-                return;
-            }
-            else if (value == 'CE') {
-                setCurrentCount(0);
-                setOperationList([]);
-                return;
-            }
-
-            else if (value == '.') {
-                return;
-            }
-
-            else if (value == 'BSP') {
-                setCurrentCount(Math.floor(currentCount/10));
-                return;
-            }
-
-            else {
-                return;
-            }
+            
+        }
+        else if (operation == '=') {
+            return;
+        }
+        else {
+            return;
         }
     }
 
@@ -134,44 +88,44 @@ const Calculator = () => {
         <div className='calculator-button-row'>
             {/* Row 1 */}
             <Button type='%' buttonClickedFunc={() => alert('%')}/>
-            <Button type='CE' buttonClickedFunc={() => modifyCount('CE')}/>
-            <Button type='C' buttonClickedFunc={() => modifyCount('C')}/>
-            <Button type='BSP' buttonClickedFunc={() => modifyCount('BSP')}/>
+            <Button type='CE' buttonClickedFunc={() => alert('CE')}/>
+            <Button type='C' buttonClickedFunc={() => alert('C')}/>
+            <Button type='BSP' buttonClickedFunc={() => alert('BSP')}/>
         </div>
         <div className='calculator-button-row'>
             {/* Row 2 */}
             <Button type='1/x' buttonClickedFunc={() => alert('1/x')}/>
             <Button type='x^2' buttonClickedFunc={() => alert('x^2')}/>
             <Button type='x^(1/2)' buttonClickedFunc={() => alert('x^(1/2)')}/>
-            <Button type='/' buttonClickedFunc={() => modifyCount('/')}/>
+            <Button type='/' buttonClickedFunc={() => modifyOperation('/')}/>
         </div>
         <div className='calculator-button-row'>
             {/* Row 3 - Numbers Start Here */}
-            <Button type='7' buttonClickedFunc={() => modifyCount(7)}/>
-            <Button type='8' buttonClickedFunc={() => modifyCount(8)}/>
-            <Button type='9' buttonClickedFunc={() => modifyCount(9)}/>
-            <Button type='X' buttonClickedFunc={() => modifyCount('X')}/>
+            <Button type='7' buttonClickedFunc={() => modifyValue(7)}/>
+            <Button type='8' buttonClickedFunc={() => modifyValue(8)}/>
+            <Button type='9' buttonClickedFunc={() => modifyValue(9)}/>
+            <Button type='*' buttonClickedFunc={() => modifyOperation('*')}/>
         </div>
         <div className='calculator-button-row'>
             {/* Row 4 */}
-            <Button type='4' buttonClickedFunc={() => modifyCount(4)}/>
-            <Button type='5' buttonClickedFunc={() => modifyCount(5)}/>
-            <Button type='6' buttonClickedFunc={() => modifyCount(6)}/>
-            <Button type='-' buttonClickedFunc={() => modifyCount('-')}/>
+            <Button type='4' buttonClickedFunc={() => modifyValue(4)}/>
+            <Button type='5' buttonClickedFunc={() => modifyValue(5)}/>
+            <Button type='6' buttonClickedFunc={() => modifyValue(6)}/>
+            <Button type='-' buttonClickedFunc={() => modifyOperation('-')}/>
         </div>
         <div className='calculator-button-row'>
             {/* Row 5 */}
-            <Button type='1' buttonClickedFunc={() => modifyCount(1)}/>
-            <Button type='2' buttonClickedFunc={() => modifyCount(2)}/>
-            <Button type='3' buttonClickedFunc={() => modifyCount(3)}/>
-            <Button type='+' buttonClickedFunc={() => modifyCount('+')}/>
+            <Button type='1' buttonClickedFunc={() => modifyValue(1)}/>
+            <Button type='2' buttonClickedFunc={() => modifyValue(2)}/>
+            <Button type='3' buttonClickedFunc={() => modifyValue(3)}/>
+            <Button type='+' buttonClickedFunc={() => modifyOperation('+')}/>
         </div>
         <div className='calculator-button-row'>
             {/* Row 6 */}
             <Button type='+/-' buttonClickedFunc={() => alert('+/-')}/>
-            <Button type='0' buttonClickedFunc={() => modifyCount(0)}/>
-            <Button type='.' buttonClickedFunc={() => modifyCount('.')}/>
-            <Button type='=' buttonClickedFunc={() => modifyCount('=')}/>
+            <Button type='0' buttonClickedFunc={() => modifyValue(0)}/>
+            <Button type='.' buttonClickedFunc={() => alert('.')}/>
+            <Button type='=' buttonClickedFunc={() => modifyOperation('=')}/>
         </div>
     </div>
   )
