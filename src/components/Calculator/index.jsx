@@ -81,8 +81,18 @@ const Calculator = () => {
                 return;
             }
             
-            const tempCount = (currentCount)**(1/2);
+            const tempCount = currentCount**(1/2);
             setCurrentCount(tempCount.toString());
+            return;
+        }
+        else if (value == '^2') {
+            if (currentCount == '0') {
+                return;
+            }
+
+            const tempCount = currentCount**2;
+            setCurrentCount(tempCount.toString());
+            return;
         }
         else {
             console.log("No Correct value in modify value.");
@@ -167,7 +177,7 @@ const Calculator = () => {
         <div className='calculator-button-row'>
             {/* Row 2 */}
             <Button type='1/x' buttonClickedFunc={() => alert('1/x')}/>
-            <Button type='x^2' buttonClickedFunc={() => alert('x^2')}/>
+            <Button type='x^2' buttonClickedFunc={() => modifyValue('^2')}/>
             <Button type='x^(1/2)' buttonClickedFunc={() => modifyValue('sqr')}/>
             <Button type='/' buttonClickedFunc={() => modifyOperation('/')}/>
         </div>
