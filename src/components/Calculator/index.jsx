@@ -9,6 +9,7 @@ const Calculator = () => {
     const [operationList, setOperationList] = useState('');
     const [currentCount, setCurrentCount] = useState('0');
     const [isNewValue, setIsNewValue] = useState(true);
+    const [isEquals, setIsEquals] = useState(false);
 
     // Change current count
     // wait for button click
@@ -20,8 +21,12 @@ const Calculator = () => {
     //  - if C then clear all the entries
 
     const modifyValue = (value) => {
-        if (typeof value == 'number') {
+        if (typeof value == 'number' || value == '.') {
             if (isNewValue) {
+                if (isEquals) {
+                    setOperationList('');
+                    setIsEquals(false);
+                }
                 setCurrentCount(value.toString());
                 setIsNewValue(false);
                 return;
@@ -33,13 +38,46 @@ const Calculator = () => {
                 return;
             }
         }
-        else if (value == 'BSP') {
+        else if (value == 'BSP' && !isNewValue) {
             const tempValue = currentCount.slice(0, -1);
             setCurrentCount(tempValue);
             return;
         }
+        else if (value == 'CE') {
+            if (isEquals) {
+                setCurrentCount('0');
+                setOperationList('');
+                setIsNewValue(true);
+                setIsEquals(false);
+                return;
+            }
+            setCurrentCount('0');
+            setIsNewValue(true);
+            return;
+        }
+        else if (value == 'C') {
+            setCurrentCount('0');
+            setOperationList('');
+            setIsNewValue(true);
+            setIsEquals(false);
+        }
+        else if (value == '+/-') {
+            if (currentCount == '0') {
+                return;
+            }
+            else if (currentCount.slice(0,1) == '-') {
+                const tempCount = currentCount.slice(1);
+                setCurrentCount(tempCount);
+                return;
+            }
+            else {
+                const tempCount = '-' + currentCount;
+                setCurrentCount(tempCount);
+                return;
+            }
+        }
         else {
-            console.log("No Correct value in modify value.")
+            console.log("No Correct value in modify value.");
             return;
         }
     }
@@ -47,7 +85,13 @@ const Calculator = () => {
     const modifyOperation = (operation) => {
         const operations = ['+','-','*','/'];
         if (operations.includes(operation)) {
-            if (operations.includes(operationList.slice(-1))) {
+            if (isEquals) {
+                setOperationList(currentCount + operation);
+                setIsEquals(false);
+                setIsNewValue(true);
+            }
+            else if (operations.includes(operationList.slice(-1)) && isNewValue) {
+                
                 const tempOperationList = operationList.slice(0, -1) + operation;
                 setOperationList(tempOperationList);
                 return;
@@ -59,10 +103,30 @@ const Calculator = () => {
                 setOperationList(tempOperationList);
                 setIsNewValue(true);
                 return;
-            }
-            
+            } 
         }
         else if (operation == '=') {
+            if (operations.includes(operationList.slice(-1))) {
+                if (currentCount == '0') {
+                    const tempOperationList = operationList.slice(0, -1) + operation;
+                    setOperationList(tempOperationList);
+                    setIsNewValue(true);
+                    setIsEquals(true);
+                    return;
+                }
+                const tempOperationList = operationList + currentCount + operation;
+                const evalValueTotal = eval(operationList + currentCount);
+                setOperationList(tempOperationList);
+                setCurrentCount(evalValueTotal.toString());
+                setIsNewValue(true);
+                setIsEquals(true);
+                return;
+            }
+
+            const tempOperationList = currentCount + operation;
+            setOperationList(tempOperationList);
+            setIsNewValue(true);
+            setIsEquals(true);
             return;
         }
         else {
@@ -88,9 +152,9 @@ const Calculator = () => {
         <div className='calculator-button-row'>
             {/* Row 1 */}
             <Button type='%' buttonClickedFunc={() => alert('%')}/>
-            <Button type='CE' buttonClickedFunc={() => alert('CE')}/>
-            <Button type='C' buttonClickedFunc={() => alert('C')}/>
-            <Button type='BSP' buttonClickedFunc={() => alert('BSP')}/>
+            <Button type='CE' buttonClickedFunc={() => modifyValue('CE')}/>
+            <Button type='C' buttonClickedFunc={() => modifyValue('C')}/>
+            <Button type='BSP' buttonClickedFunc={() => modifyValue('BSP')}/>
         </div>
         <div className='calculator-button-row'>
             {/* Row 2 */}
@@ -122,9 +186,9 @@ const Calculator = () => {
         </div>
         <div className='calculator-button-row'>
             {/* Row 6 */}
-            <Button type='+/-' buttonClickedFunc={() => alert('+/-')}/>
+            <Button type='+/-' buttonClickedFunc={() => modifyValue('+/-')}/>
             <Button type='0' buttonClickedFunc={() => modifyValue(0)}/>
-            <Button type='.' buttonClickedFunc={() => alert('.')}/>
+            <Button type='.' buttonClickedFunc={() => modifyValue('.')}/>
             <Button type='=' buttonClickedFunc={() => modifyOperation('=')}/>
         </div>
     </div>
