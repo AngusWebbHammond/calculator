@@ -3,8 +3,13 @@ import './calculator.css';
 import Button from '../Button';
 import Input from '../Input';
 import MemoryButton from '../Memory-Buttons';
+import { useSelector, useDispatch } from 'react-redux';
+import { changeCurrentValue, saveCurrentValue, clearCurrentValue } from '../../features/memory/memoryValueSlice';
 
 const Calculator = () => {
+
+    const savedValue = useSelector((state) => state.memoryValue.currentValue);
+    const dispatch = useDispatch();
 
     const [operationList, setOperationList] = useState('');
     const [currentCount, setCurrentCount] = useState('0');
@@ -101,6 +106,10 @@ const Calculator = () => {
 
             const tempCount = 1/currentCount;
             setCurrentCount(tempCount.toString());
+            return;
+        }
+        else if (value == '%') {
+            // TODO: Complete this implimetation
             return;
         }
         else {
