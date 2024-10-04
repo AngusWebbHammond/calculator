@@ -13,6 +13,7 @@ const Calculator = () => {
 
     const [operationList, setOperationList] = useState('');
     const [currentCount, setCurrentCount] = useState('0');
+    const [previousValue, setPreviousValue] = useState('0');
     const [isNewValue, setIsNewValue] = useState(true);
     const [isEquals, setIsEquals] = useState(false);
 
@@ -27,11 +28,16 @@ const Calculator = () => {
 
     const modifyValue = (value) => {
         if (typeof value == 'number' || value == '.') {
+            if (currentCount.includes('.') && value == '.') {
+                return;
+            }
             if (isNewValue) {
                 if (isEquals) {
                     setOperationList('');
                     setIsEquals(false);
                 }
+                const prevVal = currentCount;
+                setPreviousValue(prevVal);
                 setCurrentCount(value.toString());
                 setIsNewValue(false);
                 return;
@@ -61,6 +67,7 @@ const Calculator = () => {
             return;
         }
         else if (value == 'C') {
+            setPreviousValue('0');
             setCurrentCount('0');
             setOperationList('');
             setIsNewValue(true);
@@ -110,6 +117,8 @@ const Calculator = () => {
         }
         else if (value == '%') {
             // TODO: Complete this implimetation
+            const tempValue = currentCount/previousValue;
+            setCurrentCount(tempValue.toString());
             return;
         }
         else {
@@ -187,7 +196,7 @@ const Calculator = () => {
         </div>
         <div className='calculator-button-row'>
             {/* Row 1 */}
-            <Button type='%' buttonClickedFunc={() => alert('%')}/>
+            <Button type='%' buttonClickedFunc={() => modifyValue('%')}/> {/* TODO: Fix this button */}
             <Button type='CE' buttonClickedFunc={() => modifyValue('CE')}/>
             <Button type='C' buttonClickedFunc={() => modifyValue('C')}/>
             <Button type='BSP' buttonClickedFunc={() => modifyValue('BSP')}/>
