@@ -178,7 +178,7 @@ const Calculator = () => {
         </div>
         <div>
             {/* Memory */}
-            <MemoryButton type='MC' onclick={() => dispatch(saveCurrentValue('0'))}/>
+            <MemoryButton type='MC' onclick={() => dispatch(clearCurrentValue)}/>
             <MemoryButton type='MR' onclick={() => setCurrentCount(savedValue)}/>
             <MemoryButton type='M+' onclick={() => dispatch(changeCurrentValue('1'))}/>
             <MemoryButton type='M-' onclick={() => dispatch(changeCurrentValue('-1'))}/>
