@@ -3,7 +3,7 @@ import './memory-buttons.css';
 
 const MemoryButton = (props) => {
   return (
-    <button className='button'>{props.type}</button>
+    <button className='button' onClick={props.onclick}>{props.type}</button>
   )
 }
 

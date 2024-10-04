@@ -10,7 +10,7 @@ export const memoryValueSlice = createSlice({
             state.currentValue = action.payload
         },
         changeCurrentValue: (state, action) => {
-            state.currentValue += action.payload
+            state.currentValue = (parseFloat(state.currentValue, 10) + parseFloat(action.payload)).toString()
         },
         clearCurrentValue: (state) => {
             state.currentValue = '0'
