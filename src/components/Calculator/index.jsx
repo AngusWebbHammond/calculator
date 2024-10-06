@@ -31,12 +31,10 @@ const Calculator = () => {
     //  - if C then clear all the entries
 
     const saveToHistory = (opList, currCount) => {
-        // To be finshed, should be adding the current count and operation list to history
         const tempHistory = history;
         tempHistory.push([uniqueHistoryKey, opList, currCount]);
         setUniqueHistoryKey(uniqueHistoryKey+1);
         setHistory(tempHistory);
-        console.log(history);
     }
 
     const modifyValue = (value) => {
@@ -152,7 +150,7 @@ const Calculator = () => {
                 setOperationList(currentCount + operation);
                 setIsEquals(false);
                 setIsNewValue(true);
-                
+                setIsFirstOperation(false);
             }
             else if (operations.includes(operationList.slice(-1)) && isNewValue) {
                 
