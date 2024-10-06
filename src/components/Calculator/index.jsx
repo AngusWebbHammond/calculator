@@ -294,7 +294,10 @@ const Calculator = () => {
                         <div className='memory-item'>
                             {history.map((n) => 
                                 <div key={n[0]}>
-                                    <button className='memory-item-value'>
+                                    <button onClick={() => {
+                                        setCurrentCount(n[2]);
+                                        setOperationList(n[1]);
+                                    }} className='memory-item-value'>
                                         <div>{n[1]}</div>
                                         <div>{n[2]}</div>
                                     </button>
