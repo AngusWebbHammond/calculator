@@ -9,3 +9,36 @@
     border: solid 1px black;
     padding: 2px;
 }
+
+.history-container {
+    display: block;
+    border: solid 1px black;
+    min-width: 250px;
+}
+
+.main-container {
+    display: flex;
+}
+
+.history-navbar {
+    text-align: left;
+    height: 40px;
+}
+
+.nav-buttons {
+    width: 75px;
+}
+
+h4 {
+    margin: 0;
+}
+
+.history-memory-information {
+    text-align: right;
+}
+
+.memory-item-value {
+    width: 250px;
+    text-align: right;
+    height: 30px;
+}

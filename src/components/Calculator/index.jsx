@@ -14,6 +14,8 @@ const Calculator = () => {
     const [operationList, setOperationList] = useState('');
     const [currentCount, setCurrentCount] = useState('0');
     const [previousValue, setPreviousValue] = useState('0');
+    const [history, setHistory] = useState([]);
+    const [isHistory, setIsHistory] = useState(true);
     const [isNewValue, setIsNewValue] = useState(true);
     const [isEquals, setIsEquals] = useState(false);
 
@@ -185,61 +187,90 @@ const Calculator = () => {
     }
 
   return (
-    <div className='calculator-container'>
-        <div>
-            {/* Input/Output */}
-            <Input currentValue={currentCount} currentOperation={operationList}/>
+    <div className='main-container'>
+        <div className='calculator-container'>
+            <div>
+                {/* Input/Output */}
+                <Input currentValue={currentCount} currentOperation={operationList}/>
+            </div>
+            <div>
+                {/* Memory */}
+                <MemoryButton type='MC' onclick={() => dispatch(clearCurrentValue())}/>
+                <MemoryButton type='MR' onclick={() => setCurrentCount(savedValue)}/>
+                <MemoryButton type='M+' onclick={() => dispatch(changeCurrentValue('1'))}/>
+                <MemoryButton type='M-' onclick={() => dispatch(changeCurrentValue('-1'))}/>
+                <MemoryButton type='MS' onclick={() => dispatch(saveCurrentValue(currentCount))}/>
+                {/* <MemoryButton type='M^' /> */}
+            </div>
+            <div className='calculator-button-row'>
+                {/* Row 1 */}
+                <Button type='%' buttonClickedFunc={() => modifyValue('%')}/> {/* TODO: Fix this button */}
+                <Button type='CE' buttonClickedFunc={() => modifyValue('CE')}/>
+                <Button type='C' buttonClickedFunc={() => modifyValue('C')}/>
+                <Button type='BSP' buttonClickedFunc={() => modifyValue('BSP')}/>
+            </div>
+            <div className='calculator-button-row'>
+                {/* Row 2 */}
+                <Button type='1/x' buttonClickedFunc={() => modifyValue('resp')}/>
+                <Button type='x^2' buttonClickedFunc={() => modifyValue('^2')}/>
+                <Button type='x^(1/2)' buttonClickedFunc={() => modifyValue('sqr')}/>
+                <Button type='/' buttonClickedFunc={() => modifyOperation('/')}/>
+            </div>
+            <div className='calculator-button-row'>
+                {/* Row 3 - Numbers Start Here */}
+                <Button type='7' buttonClickedFunc={() => modifyValue(7)}/>
+                <Button type='8' buttonClickedFunc={() => modifyValue(8)}/>
+                <Button type='9' buttonClickedFunc={() => modifyValue(9)}/>
+                <Button type='*' buttonClickedFunc={() => modifyOperation('*')}/>
+            </div>
+            <div className='calculator-button-row'>
+                {/* Row 4 */}
+                <Button type='4' buttonClickedFunc={() => modifyValue(4)}/>
+                <Button type='5' buttonClickedFunc={() => modifyValue(5)}/>
+                <Button type='6' buttonClickedFunc={() => modifyValue(6)}/>
+                <Button type='-' buttonClickedFunc={() => modifyOperation('-')}/>
+            </div>
+            <div className='calculator-button-row'>
+                {/* Row 5 */}
+                <Button type='1' buttonClickedFunc={() => modifyValue(1)}/>
+                <Button type='2' buttonClickedFunc={() => modifyValue(2)}/>
+                <Button type='3' buttonClickedFunc={() => modifyValue(3)}/>
+                <Button type='+' buttonClickedFunc={() => modifyOperation('+')}/>
+            </div>
+            <div className='calculator-button-row'>
+                {/* Row 6 */}
+                <Button type='+/-' buttonClickedFunc={() => modifyValue('+/-')}/>
+                <Button type='0' buttonClickedFunc={() => modifyValue(0)}/>
+                <Button type='.' buttonClickedFunc={() => modifyValue('.')}/>
+                <Button type='=' buttonClickedFunc={() => modifyOperation('=')}/>
+            </div>
         </div>
-        <div>
-            {/* Memory */}
-            <MemoryButton type='MC' onclick={() => dispatch(clearCurrentValue())}/>
-            <MemoryButton type='MR' onclick={() => setCurrentCount(savedValue)}/>
-            <MemoryButton type='M+' onclick={() => dispatch(changeCurrentValue('1'))}/>
-            <MemoryButton type='M-' onclick={() => dispatch(changeCurrentValue('-1'))}/>
-            <MemoryButton type='MS' onclick={() => dispatch(saveCurrentValue(currentCount))}/>
-            {/* <MemoryButton type='M^' /> */}
-        </div>
-        <div className='calculator-button-row'>
-            {/* Row 1 */}
-            <Button type='%' buttonClickedFunc={() => modifyValue('%')}/> {/* TODO: Fix this button */}
-            <Button type='CE' buttonClickedFunc={() => modifyValue('CE')}/>
-            <Button type='C' buttonClickedFunc={() => modifyValue('C')}/>
-            <Button type='BSP' buttonClickedFunc={() => modifyValue('BSP')}/>
-        </div>
-        <div className='calculator-button-row'>
-            {/* Row 2 */}
-            <Button type='1/x' buttonClickedFunc={() => modifyValue('resp')}/>
-            <Button type='x^2' buttonClickedFunc={() => modifyValue('^2')}/>
-            <Button type='x^(1/2)' buttonClickedFunc={() => modifyValue('sqr')}/>
-            <Button type='/' buttonClickedFunc={() => modifyOperation('/')}/>
-        </div>
-        <div className='calculator-button-row'>
-            {/* Row 3 - Numbers Start Here */}
-            <Button type='7' buttonClickedFunc={() => modifyValue(7)}/>
-            <Button type='8' buttonClickedFunc={() => modifyValue(8)}/>
-            <Button type='9' buttonClickedFunc={() => modifyValue(9)}/>
-            <Button type='*' buttonClickedFunc={() => modifyOperation('*')}/>
-        </div>
-        <div className='calculator-button-row'>
-            {/* Row 4 */}
-            <Button type='4' buttonClickedFunc={() => modifyValue(4)}/>
-            <Button type='5' buttonClickedFunc={() => modifyValue(5)}/>
-            <Button type='6' buttonClickedFunc={() => modifyValue(6)}/>
-            <Button type='-' buttonClickedFunc={() => modifyOperation('-')}/>
-        </div>
-        <div className='calculator-button-row'>
-            {/* Row 5 */}
-            <Button type='1' buttonClickedFunc={() => modifyValue(1)}/>
-            <Button type='2' buttonClickedFunc={() => modifyValue(2)}/>
-            <Button type='3' buttonClickedFunc={() => modifyValue(3)}/>
-            <Button type='+' buttonClickedFunc={() => modifyOperation('+')}/>
-        </div>
-        <div className='calculator-button-row'>
-            {/* Row 6 */}
-            <Button type='+/-' buttonClickedFunc={() => modifyValue('+/-')}/>
-            <Button type='0' buttonClickedFunc={() => modifyValue(0)}/>
-            <Button type='.' buttonClickedFunc={() => modifyValue('.')}/>
-            <Button type='=' buttonClickedFunc={() => modifyOperation('=')}/>
+        <div className="history-container">
+            <nav className='history-navbar'>
+                <button id='history-button' onClick={() => setIsHistory(true)} className='nav-buttons'>
+                    History
+                </button>
+
+                <button id='history-button' onClick={() => setIsHistory(false)} className='nav-buttons'>
+                    Memory
+                </button>
+            </nav>
+            <div className='history-memory-information'>
+                {
+                    isHistory ?
+                    (history.length < 1?<h4>No history yet.</h4>: history):
+                    (savedValue != '0' ? 
+                        <div className='memory-item'>
+                            <button className='memory-item-value' onClick={() => setCurrentCount(savedValue)}>{savedValue}</button>
+                            <div className='memory-operators'>
+                                <button onClick={() => dispatch(changeCurrentValue('1'))}>+</button>
+                                <button onClick={() => dispatch(changeCurrentValue('-1'))}>-</button>
+                                <button onClick={() => dispatch(clearCurrentValue())}>MC</button>
+                            </div>
+                        </div>:
+                        <h4>No memory yet.</h4>)
+                }
+            </div>
         </div>
     </div>
   )
