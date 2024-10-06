@@ -221,10 +221,10 @@ const Calculator = () => {
             </div>
             <div>
                 {/* Memory */}
-                <MemoryButton type='MC' onclick={() => dispatch(clearCurrentValue([savedValue[0][0], savedValue[0][1], 0]))}/>
-                <MemoryButton type='MR' onclick={() => setCurrentCount(savedValue[0][1])}/>
-                <MemoryButton type='M+' onclick={() => dispatch(changeCurrentValue([savedValue[0][0], savedValue[0][1], currentCount == 0?1:currentCount, 0]))}/>
-                <MemoryButton type='M-' onclick={() => dispatch(changeCurrentValue([savedValue[0][0], savedValue[0][1], currentCount == 0?-1:-currentCount, 0]))}/>
+                <MemoryButton type='MC' disabled={savedValue.length == 0} onclick={() => dispatch(clearCurrentValue([savedValue[0][0], savedValue[0][1], 0]))}/>
+                <MemoryButton type='MR' disabled={savedValue.length == 0} onclick={() => setCurrentCount(savedValue[0][1])}/>
+                <MemoryButton type='M+' disabled={savedValue.length == 0} onclick={() => dispatch(changeCurrentValue([savedValue[0][0], savedValue[0][1], currentCount == 0?1:currentCount, 0]))}/>
+                <MemoryButton type='M-' disabled={savedValue.length == 0} onclick={() => dispatch(changeCurrentValue([savedValue[0][0], savedValue[0][1], currentCount == 0?-1:-currentCount, 0]))}/>
                 <MemoryButton type='MS' onclick={() => {
                     if (currentCount != '0') {
                         dispatch(saveCurrentValue([uniqueMemoryKey.toString(), currentCount]));
