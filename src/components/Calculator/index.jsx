@@ -259,7 +259,7 @@ const Calculator = () => {
                 {
                     isHistory ?
                     (history.length < 1?<h4>No history yet.</h4>: history):
-                    (savedValue != '0' ? 
+                    (savedValue ? 
                         <div className='memory-item'>
                             <button className='memory-item-value' onClick={() => setCurrentCount(savedValue)}>{savedValue}</button>
                             <div className='memory-operators'>

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 export const memoryValueSlice = createSlice({
     name: 'memory',
     initialState: {
-        currentValue: '0',
+        currentValue: '',
     },
     reducers: {
         saveCurrentValue: (state, action) => {
@@ -13,7 +13,7 @@ export const memoryValueSlice = createSlice({
             state.currentValue = (parseFloat(state.currentValue, 10) + parseFloat(action.payload)).toString()
         },
         clearCurrentValue: (state) => {
-            state.currentValue = '0'
+            state.currentValue = ''
         },
     }
 })
