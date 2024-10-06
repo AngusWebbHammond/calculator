@@ -16,6 +16,7 @@ const Calculator = () => {
     const [previousValue, setPreviousValue] = useState('0');
     const [history, setHistory] = useState([]);
     const [uniqueHistoryKey, setUniqueHistoryKey] = useState(0);
+    const [uniqueMemoryKey, setUniqueMemoryKey] = useState(0);
     const [isHistory, setIsHistory] = useState(true);
     const [isNewValue, setIsNewValue] = useState(true);
     const [isEquals, setIsEquals] = useState(false);
@@ -67,6 +68,11 @@ const Calculator = () => {
         }
         else if (value == 'BSP' && !isNewValue) {
             const tempValue = currentCount.slice(0, -1);
+            if (tempValue.length == 0) {
+                setCurrentCount('0');
+                setIsNewValue(true);
+                return;
+            }
             setCurrentCount(tempValue);
             return;
         }
@@ -215,11 +221,16 @@ const Calculator = () => {
             </div>
             <div>
                 {/* Memory */}
-                <MemoryButton type='MC' disabled={!savedValue} onclick={() => dispatch(clearCurrentValue())}/>
-                <MemoryButton type='MR' disabled={!savedValue} onclick={() => setCurrentCount(savedValue)}/>
-                <MemoryButton type='M+' disabled={!savedValue} onclick={() => dispatch(changeCurrentValue('1'))}/>
-                <MemoryButton type='M-' disabled={!savedValue} onclick={() => dispatch(changeCurrentValue('-1'))}/>
-                <MemoryButton type='MS' onclick={() => dispatch(saveCurrentValue(currentCount))}/>
+                <MemoryButton type='MC' onclick={() => dispatch(clearCurrentValue([savedValue[0][0], savedValue[0][1], 0]))}/>
+                <MemoryButton type='MR' onclick={() => setCurrentCount(savedValue[0][1])}/>
+                <MemoryButton type='M+' onclick={() => dispatch(changeCurrentValue([savedValue[0][0], savedValue[0][1], currentCount == 0?1:currentCount, 0]))}/>
+                <MemoryButton type='M-' onclick={() => dispatch(changeCurrentValue([savedValue[0][0], savedValue[0][1], currentCount == 0?-1:-currentCount, 0]))}/>
+                <MemoryButton type='MS' onclick={() => {
+                    if (currentCount != '0') {
+                        dispatch(saveCurrentValue([uniqueMemoryKey.toString(), currentCount]));
+                        setUniqueMemoryKey(uniqueMemoryKey+1);
+                    }
+                }}/>
                 {/* <MemoryButton type='M^' /> */}
             </div>
             <div className='calculator-button-row'>
@@ -291,15 +302,20 @@ const Calculator = () => {
                             )}
                         </div>
                     ):
-                    (savedValue ? 
+                    (savedValue.length > 0 ? 
                         <div className='memory-item'>
-                            <button className='memory-item-value' onClick={() => setCurrentCount(savedValue)}>{savedValue}</button>
-                            <div className='memory-operators'>
-                                <button onClick={() => dispatch(changeCurrentValue('1'))}>+</button>
-                                <button onClick={() => dispatch(changeCurrentValue('-1'))}>-</button>
-                                <button onClick={() => dispatch(clearCurrentValue())}>MC</button>
-                            </div>
-                        </div>:
+                            {savedValue.map((n,index) =>
+                                <div key={n[0]}>
+                                    <button className='memory-item-value' onClick={() => setCurrentCount(n[1])}>{n[1]}</button>
+                                    <div className='memory-operators'>
+                                        <button onClick={() => dispatch(changeCurrentValue([n[0], n[1], currentCount == 0?1:currentCount, index]))}>+</button>
+                                        <button onClick={() => dispatch(changeCurrentValue([n[0], n[1], currentCount == 0?-1:-currentCount, index]))}>-</button>
+                                        <button onClick={() => dispatch(clearCurrentValue([n[0], n[1], index]))}>MC</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                        :
                         <h4>No memory yet.</h4>
                     )
                 }
