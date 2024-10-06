@@ -38,6 +38,11 @@ const Calculator = () => {
                 }
                 const prevVal = currentCount;
                 setPreviousValue(prevVal);
+                if (value == '.') {
+                    setCurrentCount('0'+value.toString());
+                    setIsNewValue(false);
+                    return;
+                }
                 setCurrentCount(value.toString());
                 setIsNewValue(false);
                 return;
