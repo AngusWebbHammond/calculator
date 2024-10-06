@@ -195,10 +195,10 @@ const Calculator = () => {
             </div>
             <div>
                 {/* Memory */}
-                <MemoryButton type='MC' onclick={() => dispatch(clearCurrentValue())}/>
-                <MemoryButton type='MR' onclick={() => setCurrentCount(savedValue)}/>
-                <MemoryButton type='M+' onclick={() => dispatch(changeCurrentValue('1'))}/>
-                <MemoryButton type='M-' onclick={() => dispatch(changeCurrentValue('-1'))}/>
+                <MemoryButton type='MC' disabled={!savedValue} onclick={() => dispatch(clearCurrentValue())}/>
+                <MemoryButton type='MR' disabled={!savedValue} onclick={() => setCurrentCount(savedValue)}/>
+                <MemoryButton type='M+' disabled={!savedValue} onclick={() => dispatch(changeCurrentValue('1'))}/>
+                <MemoryButton type='M-' disabled={!savedValue} onclick={() => dispatch(changeCurrentValue('-1'))}/>
                 <MemoryButton type='MS' onclick={() => dispatch(saveCurrentValue(currentCount))}/>
                 {/* <MemoryButton type='M^' /> */}
             </div>
@@ -268,7 +268,8 @@ const Calculator = () => {
                                 <button onClick={() => dispatch(clearCurrentValue())}>MC</button>
                             </div>
                         </div>:
-                        <h4>No memory yet.</h4>)
+                        <h4>No memory yet.</h4>
+                    )
                 }
             </div>
         </div>
