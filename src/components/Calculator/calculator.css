@@ -36,6 +36,7 @@ h4 {
 
 .history-memory-information {
     text-align: right;
+    height: max-content;
 }
 
 .memory-item-value {
@@ -45,4 +46,9 @@ h4 {
 }
 .memory-item {
     display: inline-block;
+}
+
+.clear-history-button {
+    position: sticky;
+    margin-top: auto;
 }

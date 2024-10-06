@@ -300,7 +300,9 @@ const Calculator = () => {
                                     </button>
                                 </div>
                             )}
+                            <button className='clear-history-button' onClick={() => setHistory([])}>Clear</button>
                         </div>
+                        
                     ):
                     (savedValue.length > 0 ? 
                         <div className='memory-item'>
