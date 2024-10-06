@@ -7,6 +7,7 @@ The main idea of this component was to have a pop up calculator that can be used
 ## Current Features
 * Memory Handling through React Redux and React Toolkit
 * Full number and operation handling
+* History
 
 ## Planned Future Features
 * Multiple Modes
@@ -14,7 +15,6 @@ The main idea of this component was to have a pop up calculator that can be used
     * Graphing
     * Programmer
     * Date Calculation
-* History
 * Increased memory to store more results
 * Dark Mode
 * Window Mode
