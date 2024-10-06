@@ -42,3 +42,6 @@ h4 {
     text-align: right;
     height: 30px;
 }
+.memory-item {
+    display: inline-block;
+}

@@ -15,9 +15,11 @@ const Calculator = () => {
     const [currentCount, setCurrentCount] = useState('0');
     const [previousValue, setPreviousValue] = useState('0');
     const [history, setHistory] = useState([]);
+    const [uniqueHistoryKey, setUniqueHistoryKey] = useState(0);
     const [isHistory, setIsHistory] = useState(true);
     const [isNewValue, setIsNewValue] = useState(true);
     const [isEquals, setIsEquals] = useState(false);
+    const [isFirstOperation, setIsFirstOperation] = useState(true);
 
     // Change current count
     // wait for button click
@@ -27,6 +29,15 @@ const Calculator = () => {
     //  - if backspace then remove right most in current number, this does not effect the total at all
     //  - if CE then clear most recent entry (current number)
     //  - if C then clear all the entries
+
+    const saveToHistory = (opList, currCount) => {
+        // To be finshed, should be adding the current count and operation list to history
+        const tempHistory = history;
+        tempHistory.push([uniqueHistoryKey, opList, currCount]);
+        setUniqueHistoryKey(uniqueHistoryKey+1);
+        setHistory(tempHistory);
+        console.log(history);
+    }
 
     const modifyValue = (value) => {
         if (typeof value == 'number' || value == '.') {
@@ -141,6 +152,7 @@ const Calculator = () => {
                 setOperationList(currentCount + operation);
                 setIsEquals(false);
                 setIsNewValue(true);
+                
             }
             else if (operations.includes(operationList.slice(-1)) && isNewValue) {
                 
@@ -149,11 +161,16 @@ const Calculator = () => {
                 return;
             }
             else{
-                const evalValueTotal = eval(operationList + currentCount);
+                const tempOperations = operationList + currentCount
+                const evalValueTotal = eval(tempOperations);
+                if (!isFirstOperation){
+                    saveToHistory(tempOperations+'=',evalValueTotal);
+                }
                 const tempOperationList = evalValueTotal + operation;
                 setCurrentCount(evalValueTotal.toString());
                 setOperationList(tempOperationList);
                 setIsNewValue(true);
+                setIsFirstOperation(false);
                 return;
             } 
         }
@@ -164,21 +181,26 @@ const Calculator = () => {
                     setOperationList(tempOperationList);
                     setIsNewValue(true);
                     setIsEquals(true);
+                    setIsFirstOperation(true);
                     return;
                 }
                 const tempOperationList = operationList + currentCount + operation;
                 const evalValueTotal = eval(operationList + currentCount);
+                saveToHistory(tempOperationList,evalValueTotal.toString());
                 setOperationList(tempOperationList);
                 setCurrentCount(evalValueTotal.toString());
                 setIsNewValue(true);
                 setIsEquals(true);
+                setIsFirstOperation(true);
                 return;
             }
 
             const tempOperationList = currentCount + operation;
+            saveToHistory(tempOperationList,currentCount);
             setOperationList(tempOperationList);
             setIsNewValue(true);
             setIsEquals(true);
+            setIsFirstOperation(true);
             return;
         }
         else {
@@ -258,7 +280,19 @@ const Calculator = () => {
             <div className='history-memory-information'>
                 {
                     isHistory ?
-                    (history.length < 1?<h4>No history yet.</h4>: history):
+                    (history.length < 1 ? 
+                        <h4>No history yet.</h4>:
+                        <div className='memory-item'>
+                            {history.map((n) => 
+                                <div key={n[0]}>
+                                    <button className='memory-item-value'>
+                                        <div>{n[1]}</div>
+                                        <div>{n[2]}</div>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ):
                     (savedValue ? 
                         <div className='memory-item'>
                             <button className='memory-item-value' onClick={() => setCurrentCount(savedValue)}>{savedValue}</button>
